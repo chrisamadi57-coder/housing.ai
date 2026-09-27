@@ -18,6 +18,7 @@ from fastapi import APIRouter, File, Form, HTTPException, UploadFile
 from app.models import GPSPoint, MediaRecord
 from app.services.metadata import extract_image_metadata, make_thumbnail
 from app.services.storage import storage
+from app.services.verification import verify_location
 
 router = APIRouter()
 
@@ -40,6 +41,8 @@ async def upload_media(
     file: UploadFile = File(..., description="Image or video file"),
     gps_lat: Optional[float] = Form(None, description="Capture latitude"),
     gps_lng: Optional[float] = Form(None, description="Capture longitude"),
+    property_lat: Optional[float] = Form(None, description="Property latitude"),
+    property_lng: Optional[float] = Form(None, description="Property longitude"),
 ):
     """
     Upload a media file for a property listing.
@@ -97,7 +100,20 @@ async def upload_media(
     gps = None
     if gps_lat is not None and gps_lng is not None:
         gps = GPSPoint(lat=gps_lat, lng=gps_lng)
-
+    # --- 6. Location verification (only when we have both sides) ---
+    verification = None
+    if gps and property_lat is not None and property_lng is not None:
+        try:
+            verification = verify_location(
+                upload_gps={"lat": gps_lat, "lng": property_lng},
+                property_gps={"lat": property_lat, "lng": property_lng}
+            )
+        except Exception as e:
+            # Never let verification failure kill the upload
+            verification = {
+                "verified": False,
+                "reason": f"Verification error: {type(e).__name__}: {e}",
+            }
     record = MediaRecord(
         id=media_id,
         filename=file.filename,
@@ -108,7 +124,7 @@ async def upload_media(
         thumbnail_path=thumbnail_path,
         metadata=metadata,
         gps=gps,
-        verification=None,       # filled in during Phase 2
+        verification=verification,       # filled in during Phase 2
         status="ready" if "error" not in metadata else "failed",
         created_at=datetime.now(timezone.utc),
     )
