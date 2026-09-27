@@ -18,6 +18,8 @@ from fastapi import APIRouter, File, Form, HTTPException, UploadFile
 from app.models import GPSPoint, MediaRecord
 from app.services.metadata import extract_image_metadata, make_thumbnail
 from app.services.storage import storage
+from app.services import record_store
+from app.workers.tasks import process_media
 from app.services.verification import verify_location
 
 router = APIRouter()
@@ -31,10 +33,6 @@ ALLOWED_CONTENT_TYPES = {
 }
 MAX_FILE_SIZE_MB = 50
 IMAGE_TYPES = {"image/jpeg", "image/png", "image/webp"}
-
-# --- In-memory store (replaced by DB later) ---
-MEDIA_DB: dict[str, MediaRecord] = {}
-
 
 @router.post("/upload", response_model=MediaRecord, status_code=201)
 async def upload_media(
@@ -82,38 +80,14 @@ async def upload_media(
             detail=f"File exceeds {MAX_FILE_SIZE_MB} MB",
         )
 
-    # --- 4. Metadata + thumbnail (images only for now) ---
-    metadata: dict = {}
-    thumbnail_path: Optional[str] = None
-
-    if file.content_type in IMAGE_TYPES:
-        metadata = extract_image_metadata(path)
-        if "error" not in metadata:
-            try:
-                thumb = make_thumbnail(path)
-                thumbnail_path = str(thumb)
-            except Exception as e:
-                # Don't fail the whole upload for a thumbnail issue
-                metadata["thumbnail_error"] = str(e)
-
-    # --- 5. Build record ---
+    # --- 4. Build GPS objects ---
     gps = None
     if gps_lat is not None and gps_lng is not None:
         gps = GPSPoint(lat=gps_lat, lng=gps_lng)
-    # --- 6. Location verification (only when we have both sides) ---
-    verification = None
-    if gps and property_lat is not None and property_lng is not None:
-        try:
-            verification = verify_location(
-                upload_gps={"lat": gps_lat, "lng": property_lng},
-                property_gps={"lat": property_lat, "lng": property_lng}
-            )
-        except Exception as e:
-            # Never let verification failure kill the upload
-            verification = {
-                "verified": False,
-                "reason": f"Verification error: {type(e).__name__}: {e}",
-            }
+
+    property_gps = None
+    if property_lat is not None and property_lng is not None:
+        property_gps = GPSPoint(lat=property_lat, lng=property_lng)
     record = MediaRecord(
         id=media_id,
         filename=file.filename,
@@ -121,27 +95,34 @@ async def upload_media(
         size_bytes=size_bytes,
         sha256=sha256,
         path=str(path),
-        thumbnail_path=thumbnail_path,
-        metadata=metadata,
-        gps=gps,
-        verification=verification,       # filled in during Phase 2
-        status="ready" if "error" not in metadata else "failed",
+        thumbnail_path=None,          # worker fills in
+        metadata={},                  # worker fills in
+        gps=gps,                      
+        property_gps=property_gps,
+        verification=None,            # worker fills in
+        status="processing",          # worker will set to "ready"
         created_at=datetime.now(timezone.utc),
     )
 
-    MEDIA_DB[media_id] = record
+    # --- 5. Persist BEFORE enqueue (worker might pick up instantly) ---
+    record_store.save(record)
+
+    # --- 6. Enqueue the background job ---
+    process_media.delay(media_id)
+
     return record
 
 
 @router.get("/{media_id}", response_model=MediaRecord)
 def get_media(media_id: str):
     """Fetch a previously uploaded media record by ID."""
-    if media_id not in MEDIA_DB:
+    record = record_store.get(media_id)
+    if record is None:
         raise HTTPException(status_code=404, detail="Media not found")
-    return MEDIA_DB[media_id]
+    return record
 
 
 @router.get("", response_model=list[MediaRecord])
 def list_media():
     """List all uploaded media. Handy for dev/testing."""
-    return list(MEDIA_DB.values())
+    return record_store.list_all()
