@@ -28,6 +28,10 @@ class MediaRecord(BaseModel):
     # Location proof — set if caller supplied GPS
     gps: Optional[GPSPoint] = None
 
+    # The claimed location of the property this media is attached to
+    # (used by the worker for verification). Optional -- listings may not have it yet.
+    property_gps: Optional[GPSPoint] = None
+
     # Filled in during Phase 2 (GPS verification). Shape: {"verified": bool, "distance_meters": float, "reason": str}
     verification: Optional[dict] = None
 

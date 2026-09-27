@@ -31,3 +31,7 @@ celery_app.conf.update(
     # Optional: how long a task result stays in Redis (seconds)
     result_expires=3600,
 )
+
+# Tell Celery where to look for @task functions.
+# It scans these packages for a 'tasks.py' module and imports it.
+celery_app.autodiscover_tasks(["app.workers"])
