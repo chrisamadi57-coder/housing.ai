@@ -18,6 +18,8 @@ Storage format:
     TTL:    none for now — records live until manually deleted
 """
 
+from datetime import datetime, timezone
+
 import redis
 
 from app.config import settings
@@ -36,6 +38,7 @@ def _key(media_id: str) -> str:
 
 def save(record: MediaRecord) -> None:
     """Persist a record. Overwrites if it already exists."""
+    record.updated_at = datetime.now(timezone.utc)
     _client.set(_key(record.id), record.model_dump_json())
 
 

@@ -2,13 +2,17 @@
 Celery tasks — background work that runs in a separate process.
 
 The pattern:
-    routes/media.py saves a MediaRecord with status="processing"
-    routes/media.py calls process_media.delay(media_id) and returns 202
+    routes/media.py saves a MediaRecord with status="processing", stage="received"
+    routes/media.py calls process_media.delay(media_id) and returns 201
     a Celery worker picks up the job and calls process_media(media_id)
-    process_media does the slow work, updates the record, sets status="ready"
+    process_media does the slow work, updates stage along the way, sets status="ready"
 
 Everything the task needs is in the record — no large arguments passed
 through the queue.
+
+Stage progression:
+    received → metadata → thumbnail → verification → done
+    On error: stage="error", status="failed"
 """
 
 from pathlib import Path
@@ -24,11 +28,15 @@ def process_media(self, media_id: str) -> dict:
     """
     Background job: extract metadata, generate thumbnail, run verification.
 
+    Saves the record after each stage so GET /media/{id}/status reflects
+    real-time progress — even if the worker crashes mid-task, the last
+    saved stage tells us where it stopped.
+
     Args:
         media_id: the ID of a MediaRecord previously saved to record_store.
 
     Returns:
-        {"media_id": str, "status": str} on success
+        {"media_id": str, "status": str, "stage": str} on success
         {"error": str} on structural failure (missing record)
     """
 
@@ -38,14 +46,21 @@ def process_media(self, media_id: str) -> dict:
         # Structural failure: retrying won't help. Return early.
         return {"error": f"Record {media_id} not found"}
 
+    def save_stage(stage: str) -> None:
+        """Update the record's stage and persist it."""
+        record.stage = stage
+        record_store.save(record)
+
     try:
-        # --- Metadata + thumbnail (images only) ---
+        # --- Stage: metadata + thumbnail (images only) ---
         if record.content_type.startswith("image/"):
+            save_stage("metadata")
             path = Path(record.path)
             record.metadata = extract_image_metadata(path)
 
             # Only try to thumbnail if the image was valid
             if "error" not in record.metadata:
+                save_stage("thumbnail")
                 try:
                     thumb = make_thumbnail(path)
                     record.thumbnail_path = str(thumb)
@@ -53,8 +68,9 @@ def process_media(self, media_id: str) -> dict:
                     # Thumbnail failure shouldn't fail the whole task
                     record.metadata["thumbnail_error"] = f"{type(e).__name__}: {e}"
 
-        # --- Verification (only if both GPS sides are present) ---
+        # --- Stage: verification (only if both GPS sides are present) ---
         if record.gps and record.property_gps:
+            save_stage("verification")
             record.verification = verify_location(
                 upload_gps={"lat": record.gps.lat, "lng": record.gps.lng},
                 property_gps={
@@ -65,15 +81,21 @@ def process_media(self, media_id: str) -> dict:
 
         # --- All good ---
         record.status = "ready"
+        record.stage = "done"
+        record.error = None
 
     except Exception as e:
-        # Unexpected error — mark failed, but save whatever progress we made
+        # Unexpected error — mark failed, keep whatever progress we made
         record.status = "failed"
-        record.metadata["processing_error"] = f"{type(e).__name__}: {e}"
-        # NOTE: not re-raising, so Celery won't retry a deterministic bug
-        # in our code. If we want retries for specific errors, catch and
-        # call self.retry(exc=e) explicitly.
+        record.stage = "error"
+        record.error = f"{type(e).__name__}: {e}"
+        # NOTE: not re-raising, so Celery won't retry a deterministic bug.
+        # If we want retries for specific errors, call self.retry(exc=e) instead.
 
-    # --- Persist the updated record ---
+    # --- Persist the final state ---
     record_store.save(record)
-    return {"media_id": media_id, "status": record.status}
+    return {
+        "media_id": media_id,
+        "status": record.status,
+        "stage": record.stage,
+    }

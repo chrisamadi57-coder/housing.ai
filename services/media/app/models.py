@@ -38,4 +38,11 @@ class MediaRecord(BaseModel):
     # Lifecycle: pending → processing → ready | failed
     status: Literal["pending", "processing", "ready", "failed"] = "pending"
 
+    # Stage of processing
+    stage: Optional[str] = None
+
+    updated_at: Optional[datetime] = None
+
+    error: Optional[str] = None
+
     created_at: datetime
