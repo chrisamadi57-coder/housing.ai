@@ -12,6 +12,7 @@ import logging
 
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
+from fastapi.exceptions import RequestValidationError
 
 logger = logging.getLogger(__name__)
 
@@ -63,6 +64,42 @@ def install_error_handlers(app: FastAPI) -> None:
                     "code": "INTERNAL_ERROR",
                     "message": "Something went wrong on our end.",
                     "details": {},
+                }
+            },
+        )
+    @app.exception_handler(RequestValidationError)
+    async def validation_error_handler(request: Request, exc: RequestValidationError):
+        """
+        FastAPI raises this when form/body/query data fails validation 
+        (bad types, missing required fields, out-of-range numbers).
+        Reshape it to match our standard error format.
+        """
+
+        # exc.errors() returns a list of dicts - one per invalid field.
+        # We flatten the first one for 'message' and include all in 'details'.
+        errors = exc.errors()
+        first = errors[0] if errors else {}
+
+        # Human-readable summary
+        loc = ".".join(str(p) for p in first.get("loc", []))
+        message = f"Invalid input for '{loc}': {first.get('msg', 'validation failed')}"
+
+        return JSONResponse(
+            status_code=422,
+            content={
+                "error": {
+                    "code": "VALIDATION_ERROR",
+                    "message": message,
+                    "details": {
+                        "errors": [
+                            {
+                                "field": ".".join(str(p) for p in err.get("loc",[])),
+                                "message": err.get("msg", ""),
+                                "type": err.get("type", ""),
+                            }
+                            for err in errors
+                        ],
+                    },
                 }
             },
         )
