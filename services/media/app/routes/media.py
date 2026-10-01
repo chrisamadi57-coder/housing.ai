@@ -38,7 +38,7 @@ MAX_FILE_SIZE_MB = 50
 
 
 @router.post("/upload", response_model=MediaRecord, status_code=201)
-async def upload_media(
+def upload_media(
     file: UploadFile = File(..., description="Image or video file"),
     gps_lat: Optional[float] = Form(None, description="Capture latitude"),
     gps_lng: Optional[float] = Form(None, description="Capture longitude"),
@@ -121,6 +121,7 @@ async def upload_media(
         status="processing",       # worker will set to "ready"
         stage="received",          # worker advances through stages
         created_at=datetime.now(timezone.utc),
+        updated_at=datetime.now(timezone.utc),
     )
 
     # --- 6. Persist BEFORE enqueue (worker might pick up instantly) ---
