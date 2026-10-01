@@ -69,7 +69,7 @@ def _process_file(record, path: Path) -> None:
                 record.metadata["thumbnail_error"] = f"{type(e).__name__}: {e}"
 
 
-@celery_app.task(name="media.process", bind=True, max_retries=3)
+@celery_app.task(name="media.process", bind=True)
 def process_media(self, media_id: str) -> dict:
     """
     Background job: extract metadata, generate thumbnail, run verification.
@@ -82,6 +82,7 @@ def process_media(self, media_id: str) -> dict:
     # --- Load the record ---
     record = record_store.get(media_id)
     if record is None:
+        # Structural failure — retrying won't help. Return early.
         return {"error": f"Record {media_id} not found"}
 
     try:
