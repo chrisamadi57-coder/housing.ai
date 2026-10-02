@@ -24,6 +24,7 @@ import redis
 
 from app.config import settings
 from app.models import MediaRecord
+from app.services.duplicates import hamming_distance
 
 # decode_responses=True → Redis returns str instead of bytes.
 # Saves us a .decode() everywhere.
@@ -63,3 +64,30 @@ def list_all() -> list[MediaRecord]:
         if raw:
             records.append(MediaRecord.model_validate_json(raw))
     return records
+
+def find_by_phash(phash: str, threshold: int = 8) -> list[MediaRecord]:
+    """
+    Return existing records whose phash is within `threshold` bits of the given one.
+
+    Used by the worker after computing a new image's phash, to detect potential
+    duplicates of previous uploads. Skips records without a phash.
+
+    Args:
+        phash: the hex phash of the new upload
+        threshold: max Hamming distance to count as a match (default 8/64 bits)
+
+    Returns:
+        A list of MediaRecords whose phash matched. Empty if no matches.
+    """
+    matches: list[MediaRecord] = []
+    for record in list_all():
+        existing = record.metadata.get("phash")
+        if not existing:
+            continue
+        try:
+            if hamming_distance(phash, existing) <= threshold:
+                matches.append(record)
+        except ValueError:
+            # Malformed hash stored somewhere — skip it, don't crash the search
+            continue
+    return matches
