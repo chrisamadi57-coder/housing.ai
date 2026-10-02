@@ -13,8 +13,7 @@ Storage modes:
            process there, and let Python delete the temp dir when done.
 
 Stage progression:
-    received → metadata → thumbnail → verification → done
-    On error: stage="error", status="failed"
+    received → metadata → thumbnail → verification → fraud → done
 """
 
 import tempfile
@@ -32,7 +31,7 @@ from app.services.metadata import (
 from app.services.storage import storage
 from app.services.verification import verify_location
 from app.workers.celery_app import celery_app
-
+from app.services.fraud import evaluate as evaluate_fraud
 
 def _process_file(record, path: Path) -> None:
     """
@@ -84,6 +83,7 @@ def _process_file(record, path: Path) -> None:
         record.metadata = extract_video_metadata(path)
 
         if "error" not in record.metadata:
+            # --- Thumbnail first (needed for phash) ---
             record.stage = "thumbnail"
             record_store.save(record)
             try:
@@ -91,6 +91,25 @@ def _process_file(record, path: Path) -> None:
             except Exception as e:
                 record.metadata["thumbnail_error"] = f"{type(e).__name__}: {e}"
 
+            # --- Perceptual hash of the thumbnail (duplicate detection) ---
+            if record.thumbnail_path:
+                try:
+                    phash = compute_phash(Path(record.thumbnail_path))
+                    record.metadata["phash"] = phash
+
+                    matches = record_store.find_by_phash(phash, threshold=8)
+                    matches = [m for m in matches if m.id != record.id]
+
+                    if matches:
+                        record.metadata["possible_duplicates"] = [
+                            {
+                                "media_id": m.id,
+                                "distance": hamming_distance(phash, m.metadata["phash"]),
+                            }
+                            for m in matches
+                        ]
+                except Exception as e:
+                    record.metadata["phash_error"] = f"{type(e).__name__}: {e}"
 
 @celery_app.task(name="media.process", bind=True)
 def process_media(self, media_id: str) -> dict:
@@ -132,6 +151,12 @@ def process_media(self, media_id: str) -> dict:
                     "lng": record.property_gps.lng,
                 },
             )
+
+            # --- Fraud detection (runs after all signals are collected) ---
+            record.stage = "fraud"
+            record_store.save(record)
+            record.fraud = evaluate_fraud(record)
+
 
         # --- All good ---
         record.status = "ready"
