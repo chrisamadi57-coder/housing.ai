@@ -35,6 +35,9 @@ class MediaRecord(BaseModel):
     # Filled in during Phase 2 (GPS verification). Shape: {"verified": bool, "distance_meters": float, "reason": str}
     verification: Optional[dict] = None
 
+    # Filled in during Phase 5 (fraud detection). Shape: {"risk_score": int, "signals": [...]}
+    fraud: Optional[dict] = None
+
     # Lifecycle: pending → processing → ready | failed
     status: Literal["pending", "processing", "ready", "failed"] = "pending"
 
