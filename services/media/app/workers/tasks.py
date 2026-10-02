@@ -22,6 +22,7 @@ from pathlib import Path
 
 from app.config import settings
 from app.services import record_store
+from app.services.duplicates import compute_phash, hamming_distance
 from app.services.metadata import (
     extract_image_metadata,
     extract_video_metadata,
@@ -47,13 +48,35 @@ def _process_file(record, path: Path) -> None:
         record.metadata = extract_image_metadata(path)
 
         if "error" not in record.metadata:
+            # --- Perceptual hash (duplicate detection) ---
+            try:
+                phash = compute_phash(path)
+                record.metadata["phash"] = phash
+
+                # Look for existing records whose phash is close
+                matches = record_store.find_by_phash(phash, threshold=8)
+                # Exclude ourselves — we just got saved, might match our own id
+                matches = [m for m in matches if m.id != record.id]
+
+                if matches:
+                    record.metadata["possible_duplicates"] = [
+                        {
+                            "media_id": m.id,
+                            "distance": hamming_distance(phash, m.metadata["phash"]),
+                        }
+                        for m in matches
+                    ]
+            except Exception as e:
+                # Phash failure shouldn't fail the whole upload
+                record.metadata["phash_error"] = f"{type(e).__name__}: {e}"
+
+            # --- Thumbnail ---
             record.stage = "thumbnail"
             record_store.save(record)
             try:
                 record.thumbnail_path = str(make_thumbnail(path))
             except Exception as e:
                 record.metadata["thumbnail_error"] = f"{type(e).__name__}: {e}"
-
     elif record.content_type.startswith("video/"):
         record.stage = "metadata"
         record_store.save(record)
