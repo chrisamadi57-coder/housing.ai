@@ -5,7 +5,8 @@
 **Base URL (dev):** `http://localhost:8000`
 
 The media service handles upload, storage, metadata extraction, thumbnail
-generation, and location verification for property photos and videos.
+generation, location verification, duplicate detection, and fraud scoring
+for property photos and videos.
 
 **Heavy processing happens in a background worker** (Celery + Redis). The
 upload endpoint returns immediately; the caller polls for completion.
@@ -20,6 +21,7 @@ upload endpoint returns immediately; the caller polls for completion.
 | GET    | `/media/{media_id}/status` | Poll processing status |
 | GET    | `/media/{media_id}` | Fetch the full media record |
 | GET    | `/media` | List all records (dev only) |
+| POST   | `/media/parse-search` | Parse natural-language search query into filters |
 | GET    | `/health` | Service health check |
 
 ---
@@ -61,6 +63,7 @@ Upload a photo or video with optional location data.
   "gps": { "lat": 6.5244, "lng": 3.3792, "captured_at": null },
   "property_gps": { "lat": 6.5245, "lng": 3.3793, "captured_at": null },
   "verification": null,
+  "fraud": null,
   "status": "processing",
   "stage": "received",
   "updated_at": "2026-09-30T...",
