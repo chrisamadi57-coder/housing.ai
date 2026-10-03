@@ -24,6 +24,9 @@ from app.models import GPSPoint, MediaRecord
 from app.services import record_store
 from app.services.storage import storage
 from app.workers.tasks import process_media
+from pydantic import BaseModel
+from app.services.search_parser import parse_query
+
 
 router = APIRouter()
 
@@ -178,3 +181,41 @@ def get_media(media_id: str):
 def list_media():
     """List all uploaded media. Handy for dev/testing."""
     return record_store.list_all()
+
+class ParseSearchRequest(BaseModel):
+    query: str
+
+
+@router.post("/parse-search")
+def parse_search(request: ParseSearchRequest):
+    """
+    Parse a natural-language search query into structured filters.
+
+    Example:
+        POST /media/parse-search
+        {"query": "3 bed flat in Lekki under 50m"}
+
+    Returns:
+        {
+          "property_type": "flat",
+          "listing_type": null,
+          "bedrooms": 3,
+          "bathrooms": null,
+          "location": "Lekki",
+          "min_price": null,
+          "max_price": 50000000,
+          "parser": "rules"   # or "llm"
+        }
+
+    The frontend passes this dict to the search endpoint as filters.
+    """
+    if not request.query.strip():
+        raise MediaError(
+            code="EMPTY_QUERY",
+            message="The query cannot be empty.",
+            status_code=400,
+        )
+
+    result = parse_query(request.query)
+    result["query"] = request.query     # echo back for convenience
+    return result

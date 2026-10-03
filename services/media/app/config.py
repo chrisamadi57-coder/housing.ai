@@ -17,6 +17,9 @@ class Settings(BaseSettings):
     ffmpeg_bin: str = "ffmpeg"      # default: assume it's on PATH
     ffprobe_bin: str = "ffprobe"
 
+    # OpenAI (optional — falls back to rule-based parser if empty)
+    openai_api_key: str = ""
+
 
 
     class Config:
