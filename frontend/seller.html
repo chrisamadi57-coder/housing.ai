@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Seller Dashboard — HomelyNG</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .bg-brand-green { background-color: #064e3b; }
+    .text-brand-green { color: #064e3b; }
+    .hover\:bg-brand-green-dark:hover { background-color: #053a2c; }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-800 antialiased">
+
+  <header class="bg-white border-b border-gray-200 sticky top-0 z-30">
+    <nav class="max-w-7xl mx-auto flex items-center justify-between px-6 py-4">
+
+      <a href="landing.html" class="flex items-center gap-2">
+        <div class="w-9 h-9 rounded-md bg-yellow-400 flex items-center justify-center">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 10.5L12 3l9 7.5M5 9.5V21h14V9.5" />
+          </svg>
+        </div>
+        <span class="text-gray-900 font-bold text-xl">HomelyNG</span>
+      </a>
+
+      <ul class="hidden md:flex items-center gap-8 text-sm font-medium">
+        <li><a href="search.html"        class="text-gray-600 hover:text-gray-900">Buy</a></li>
+        <li><a href="rent.html"          class="text-gray-600 hover:text-gray-900">Rent</a></li>
+        <li><a href="lease.html"         class="text-gray-600 hover:text-gray-900">Lease</a></li>
+        <li><a href="international.html" class="text-gray-600 hover:text-gray-900">International</a></li>
+        <li><a href="about.html"         class="text-gray-600 hover:text-gray-900">About</a></li>
+        <li><a href="contact.html"       class="text-gray-600 hover:text-gray-900">Contact</a></li>
+      </ul>
+
+      <div class="hidden md:flex items-center gap-3">
+        <a href="seller-dashboard.html" class="flex items-center gap-2 text-sm font-medium text-gray-800 hover:text-emerald-900">
+          <span class="w-8 h-8 rounded-full bg-yellow-400 text-gray-900 flex items-center justify-center text-xs font-semibold">PH</span>
+          Prime Homes
+        </a>
+        <a href="login.html" class="border border-gray-300 text-gray-800 text-sm font-medium px-4 py-2 rounded-lg hover:bg-gray-50 transition">Log out</a>
+      </div>
+
+      <button id="mobile-menu-btn" class="md:hidden text-gray-800 p-2 -mr-2" aria-label="Menu">
+        <svg id="icon-open" xmlns="http://www.w3.org/2000/svg" class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+        <svg id="icon-close" xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </nav>
+
+    <div id="mobile-menu" class="hidden md:hidden bg-white shadow-xl border-t border-gray-100 mx-4 mt-2 rounded-2xl overflow-hidden">
+      <ul class="flex flex-col text-sm font-medium text-gray-800">
+        <li><a href="search.html"        class="block px-6 py-3.5 border-b border-gray-100 hover:bg-gray-50">Buy</a></li>
+        <li><a href="rent.html"          class="block px-6 py-3.5 border-b border-gray-100 hover:bg-gray-50">Rent</a></li>
+        <li><a href="lease.html"         class="block px-6 py-3.5 border-b border-gray-100 hover:bg-gray-50">Lease</a></li>
+        <li><a href="international.html" class="block px-6 py-3.5 border-b border-gray-100 hover:bg-gray-50">International</a></li>
+        <li><a href="about.html"         class="block px-6 py-3.5 border-b border-gray-100 hover:bg-gray-50">About</a></li>
+        <li><a href="contact.html"       class="block px-6 py-3.5 border-b border-gray-100 hover:bg-gray-50">Contact</a></li>
+        <li><a href="login.html"         class="block px-6 py-3.5 text-red-600 hover:bg-gray-50">Log out</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <!-- ================= WELCOME ================= -->
+  <section class="bg-brand-green text-white">
+    <div class="max-w-7xl mx-auto px-6 py-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div>
+        <p class="text-yellow-400 font-semibold tracking-wide text-xs uppercase mb-2">Seller Dashboard</p>
+        <h1 class="text-2xl sm:text-3xl font-bold">Welcome back, Prime Homes 👋</h1>
+        <p class="text-white/80 text-sm mt-2">Manage your listings, enquiries, and performance.</p>
+      </div>
+      <a href="#" class="bg-yellow-400 hover:bg-yellow-300 text-gray-900 font-semibold text-sm px-5 py-3 rounded-lg transition inline-flex items-center gap-2 w-fit">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+        </svg>
+        Add new property
+      </a>
+    </div>
+  </section>
+
+  <!-- ================= STATS ================= -->
+  <section class="max-w-7xl mx-auto px-6 -mt-6">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div class="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
+        <p class="text-xs text-gray-500 mb-1">Active listings</p>
+        <p class="text-2xl font-bold text-gray-900">18</p>
+        <p class="text-xs text-emerald-600 mt-1">+3 this month</p>
+      </div>
+      <div class="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
+        <p class="text-xs text-gray-500 mb-1">Total views</p>
+        <p class="text-2xl font-bold text-gray-900">1,284</p>
+        <p class="text-xs text-emerald-600 mt-1">+18% this week</p>
+      </div>
+      <div class="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
+        <p class="text-xs text-gray-500 mb-1">Enquiries</p>
+        <p class="text-2xl font-bold text-gray-900">32</p>
+        <p class="text-xs text-yellow-600 mt-1">5 unread</p>
+      </div>
+      <div class="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
+        <p class="text-xs text-gray-500 mb-1">Est. earnings</p>
+        <p class="text-2xl font-bold text-gray-900">₦42M</p>
+        <p class="text-xs text-gray-500 mt-1">Last 30 days</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= MAIN GRID ================= -->
+  <section class="max-w-7xl mx-auto px-6 py-10 grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+    <!-- Sidebar -->
+    <div class="lg:col-span-1 space-y-4">
+      <div class="bg-white rounded-xl border border-gray-200 p-6">
+        <h2 class="font-bold text-gray-900 mb-4">Quick Actions</h2>
+        <div class="space-y-2">
+          <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-lg border border-gray-200 hover:bg-gray-50 transition text-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-brand-green" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+            </svg>
+            Add property
+          </a>
+          <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-lg border border-gray-200 hover:bg-gray-50 transition text-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-brand-green" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+            </svg>
+            View enquiries
+          </a>
+          <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-lg border border-gray-200 hover:bg-gray-50 transition text-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-brand-green" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+            </svg>
+            Performance report
+          </a>
+        </div>
+      </div>
+
+      <div class="bg-emerald-50 border border-emerald-100 rounded-xl p-6">
+        <p class="text-xs font-semibold text-emerald-900 uppercase tracking-wide mb-2">Pro Tip</p>
+        <p class="text-sm text-emerald-900 leading-relaxed">
+          Listings with 5+ photos and a full description get <strong>3× more enquiries</strong>.
+        </p>
+      </div>
+    </div>
+
+    <!-- Listings table -->
+    <div class="lg:col-span-2 space-y-4">
+      <div class="bg-white rounded-xl border border-gray-200 overflow-hidden">
+        <div class="px-6 py-5 border-b border-gray-100 flex items-center justify-between">
+          <h2 class="font-bold text-gray-900">Your Listings</h2>
+          <a href="#" class="text-sm font-semibold text-brand-green hover:underline">Manage all →</a>
+        </div>
+
+        <div class="divide-y divide-gray-100">
+          <!-- Listing 1 -->
+          <div class="p-4 flex items-center gap-4">
+            <img src="https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=200&q=80"
+                 class="w-20 h-20 rounded-lg object-cover flex-shrink-0" />
+            <div class="flex-1 min-w-0">
+              <p class="font-semibold text-gray-900 text-sm truncate">5 Bedroom Detached Duplex</p>
+              <p class="text-xs text-gray-500 mt-0.5">Ikoyi, Lagos · ₦185,000,000</p>
+              <span class="inline-block mt-1 text-[10px] font-semibold bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded">Active</span>
+            </div>
+            <div class="text-right">
+              <p class="font-bold text-gray-900 text-sm">248</p>
+              <p class="text-[10px] text-gray-500">views</p>
+            </div>
+            <div class="text-right">
+              <p class="font-bold text-gray-900 text-sm">12</p>
+              <p class="text-[10px] text-gray-500">enquiries</p>
+            </div>
+            <button class="text-gray-400 hover:text-gray-700 p-2">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+              </svg>
+            </button>
+          </div>
+
+          <!-- Listing 2 -->
+          <div class="p-4 flex items-center gap-4">
+            <img src="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=200&q=80"
+                 class="w-20 h-20 rounded-lg object-cover flex-shrink-0" />
+            <div class="flex-1 min-w-0">
+              <p class="font-semibold text-gray-900 text-sm truncate">4 Bedroom Luxury Apartment</p>
+              <p class="text-xs text-gray-500 mt-0.5">Lekki Phase 1, Lagos · ₦8.5M / yr</p>
+              <span class="inline-block mt-1 text-[10px] font-semibold bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded">Active</span>
+            </div>
+            <div class="text-right">
+              <p class="font-bold text-gray-900 text-sm">182</p>
+              <p class="text-[10px] text-gray-500">views</p>
+            </div>
+            <div class="text-right">
+              <p class="font-bold text-gray-900 text-sm">8</p>
+              <p class="text-[10px] text-gray-500">enquiries</p>
+            </div>
+            <button class="text-gray-400 hover:text-gray-700 p-2">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+              </svg>
+            </button>
+          </div>
+
+          <!-- Listing 3 -->
+          <div class="p-4 flex items-center gap-4">
+            <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=200&q=80"
+                 class="w-20 h-20 rounded-lg object-cover flex-shrink-0" />
+            <div class="flex-1 min-w-0">
+              <p class="font-semibold text-gray-900 text-sm truncate">3 Bedroom Penthouse Apartment</p>
+              <p class="text-xs text-gray-500 mt-0.5">Banana Island, Lagos · ₦18M / yr</p>
+              <span class="inline-block mt-1 text-[10px] font-semibold bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded">Pending review</span>
+            </div>
+            <div class="text-right">
+              <p class="font-bold text-gray-900 text-sm">0</p>
+              <p class="text-[10px] text-gray-500">views</p>
+            </div>
+            <div class="text-right">
+              <p class="font-bold text-gray-900 text-sm">0</p>
+              <p class="text-[10px] text-gray-500">enquiries</p>
+            </div>
+            <button class="text-gray-400 hover:text-gray-700 p-2">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent enquiries -->
+      <div class="bg-white rounded-xl border border-gray-200 p-6">
+        <h2 class="font-bold text-gray-900 mb-4">Recent Enquiries</h2>
+        <ul class="space-y-4">
+          <li class="flex items-start gap-3 pb-4 border-b border-gray-100">
+            <div class="w-9 h-9 rounded-full bg-brand-green text-white flex items-center justify-center text-xs font-semibold flex-shrink-0">AO</div>
+            <div class="flex-1">
+              <p class="text-sm font-semibold text-gray-900">Aisha O.</p>
+              <p class="text-xs text-gray-500">Interested in <strong>5 Bed Duplex, Ikoyi</strong></p>
+              <p class="text-xs text-gray-400 mt-1">2 hours ago</p>
+            </div>
+            <a href="#" class="text-xs font-semibold text-brand-green hover:underline self-center">Reply</a>
+          </li>
+          <li class="flex items-start gap-3 pb-4 border-b border-gray-100">
+            <div class="w-9 h-9 rounded-full bg-yellow-400 text-gray-900 flex items-center justify-center text-xs font-semibold flex-shrink-0">JC</div>
+            <div class="flex-1">
+              <p class="text-sm font-semibold text-gray-900">James C.</p>
+              <p class="text-xs text-gray-500">Interested in <strong>4 Bed Apartment, Lekki</strong></p>
+              <p class="text-xs text-gray-400 mt-1">Yesterday</p>
+            </div>
+            <a href="#" class="text-xs font-semibold text-brand-green hover:underline self-center">Reply</a>
+          </li>
+          <li class="flex items-start gap-3">
+            <div class="w-9 h-9 rounded-full bg-brand-green text-white flex items-center justify-center text-xs font-semibold flex-shrink-0">CO</div>
+            <div class="flex-1">
+              <p class="text-sm font-semibold text-gray-900">Chinedu O.</p>
+              <p class="text-xs text-gray-500">Interested in <strong>3 Bed Penthouse, Banana Island</strong></p>
+              <p class="text-xs text-gray-400 mt-1">2 days ago</p>
+            </div>
+            <a href="#" class="text-xs font-semibold text-brand-green hover:underline self-center">Reply</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="bg-brand-green text-white">
+    <div class="max-w-6xl mx-auto px-6 py-14">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+        <div>
+          <div class="flex items-center gap-2 mb-4">
+            <div class="w-9 h-9 rounded-md bg-yellow-400 flex items-center justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 10.5L12 3l9 7.5M5 9.5V21h14V9.5" />
+              </svg>
+            </div>
+            <span class="font-bold text-lg">HomelyNG</span>
+          </div>
+          <p class="text-sm text-white/70 leading-relaxed">Your trusted partner in finding the perfect home in Nigeria and beyond.</p>
+        </div>
+        <div>
+          <h4 class="font-semibold mb-4 text-sm uppercase tracking-wide text-yellow-400">Quick Links</h4>
+          <ul class="space-y-2 text-sm text-white/80">
+            <li><a href="search.html" class="hover:text-yellow-400">Buy</a></li>
+            <li><a href="rent.html" class="hover:text-yellow-400">Rent</a></li>
+            <li><a href="lease.html" class="hover:text-yellow-400">Lease</a></li>
+            <li><a href="international.html" class="hover:text-yellow-400">International</a></li>
+            <li><a href="about.html" class="hover:text-yellow-400">About</a></li>
+            <li><a href="contact.html" class="hover:text-yellow-400">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-semibold mb-4 text-sm uppercase tracking-wide text-yellow-400">Newsletter</h4>
+          <p class="text-sm text-white/70 mb-4">Get the latest property updates.</p>
+          <form class="flex gap-2" onsubmit="event.preventDefault();">
+            <input type="email" placeholder="Enter your email" class="flex-1 px-4 py-2.5 rounded-lg text-sm text-gray-900 focus:outline-none" />
+            <button class="bg-yellow-400 hover:bg-yellow-300 text-gray-900 font-semibold px-4 py-2.5 rounded-lg text-sm transition">→</button>
+          </form>
+        </div>
+      </div>
+      <div class="border-t border-white/10 mt-12 pt-6 text-center text-xs text-white/60">© 2025 HomelyNG. All rights reserved.</div>
+    </div>
+  </footer>
+
+  <script>
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const iconOpen = document.getElementById('icon-open');
+    const iconClose = document.getElementById('icon-close');
+
+    function closeMenu() {
+      mobileMenu.classList.add('hidden');
+      iconOpen.classList.remove('hidden');
+      iconClose.classList.add('hidden');
+    }
+
+    mobileMenuBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (mobileMenu.classList.contains('hidden')) {
+        mobileMenu.classList.remove('hidden');
+        iconOpen.classList.add('hidden');
+        iconClose.classList.remove('hidden');
+      } else {
+        closeMenu();
+      }
+    });
+
+    mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
+    document.addEventListener('click', (e) => {
+      if (!mobileMenu.contains(e.target) && !mobileMenuBtn.contains(e.target)) closeMenu();
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HomelyNG — Login / Register</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Fade-up animation for hero text */
+    .fade-line {
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp 1s ease forwards;
+    }
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+    /* Staggered delays — ~8s total */
+    .delay-1 { animation-delay: 0s; }
+    .delay-2 { animation-delay: 2s; }
+    .delay-3 { animation-delay: 4s; }
+    .delay-4 { animation-delay: 6s; }
+
+    /* Tab styles */
+    .tab-active {
+      color: #064e3b;
+      font-weight: 600;
+      border-bottom: 2px solid #064e3b;
+    }
+    .tab-inactive {
+      color: #9ca3af;
+      font-weight: 500;
+      border-bottom: 2px solid transparent;
+    }
+    .tab-inactive:hover { color: #4b5563; }
+
+    /* Account-type selector cards */
+    .role-card {
+      cursor: pointer;
+      border: 2px solid #e5e7eb;
+      border-radius: 0.75rem;
+      padding: 1rem;
+      transition: all 0.2s ease;
+      background: #fff;
+    }
+    .role-card:hover { border-color: #a7f3d0; }
+    .role-card.active {
+      border-color: #064e3b;
+      background: #ecfdf5;
+      box-shadow: 0 0 0 3px rgba(6, 78, 59, 0.08);
+    }
+    .role-card.active .role-icon {
+      background: #064e3b;
+      color: #fff;
+    }
+    .role-icon {
+      width: 2.25rem;
+      height: 2.25rem;
+      border-radius: 0.5rem;
+      background: #f3f4f6;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 0.5rem;
+      transition: all 0.2s ease;
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-white">
+
+  <div class="flex flex-col lg:flex-row min-h-screen">
+
+    <!-- ================= LEFT / TOP: IMAGE PANEL ================= -->
+    <div class="relative w-full lg:w-1/2 min-h-[400px] lg:min-h-screen overflow-hidden">
+
+      <img
+        src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80"
+        alt="Luxury Home"
+        class="absolute inset-0 w-full h-full object-cover"
+      />
+      <div class="absolute inset-0 bg-black/40"></div>
+
+      <!-- Logo -->
+      <div class="absolute top-6 left-6 flex items-center gap-2 z-10">
+        <div class="w-9 h-9 rounded-md bg-yellow-400 flex items-center justify-center">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 10.5L12 3l9 7.5M5 9.5V21h14V9.5" />
+          </svg>
+        </div>
+        <span class="text-white font-bold text-lg">HomelyNG</span>
+      </div>
+
+      <!-- Animated hero text -->
+      <div class="absolute bottom-8 left-6 right-6 lg:bottom-12 lg:left-10 lg:right-10 z-10">
+        <h1 class="text-white font-bold text-3xl sm:text-4xl lg:text-5xl leading-tight">
+          <span class="fade-line delay-1 block">Find your perfect home</span>
+          <span class="fade-line delay-2 block">in Nigeria &amp; beyond</span>
+        </h1>
+        <p class="fade-line delay-3 mt-3 text-gray-200 text-sm sm:text-base max-w-md">
+          Discover verified properties, trusted agents,
+        </p>
+        <p class="fade-line delay-4 text-gray-200 text-sm sm:text-base max-w-md">
+          and seamless experiences.
+        </p>
+      </div>
+    </div>
+
+    <!-- ================= RIGHT / BOTTOM: FORM PANEL ================= -->
+    <div class="w-full lg:w-1/2 flex items-center justify-center px-6 py-10 sm:px-12">
+      <div class="w-full max-w-md">
+      <!-- Back to landing -->
+  <a href="landing.html" class="inline-flex items-center gap-2 text-sm font-bold text-emerald-900 hover:text-emerald-700 underline underline-offset-4 decoration-emerald-900 decoration-2 hover:decoration-emerald-700 mb-6 transition">
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+    </svg>
+    Back to landing page
+  </a>
+          <!-- Tabs -->
+        <div class="flex border-b border-gray-200 mb-8">
+          <button id="tab-login" class="flex-1 pb-3 tab-active" onclick="showTab('login')">
+            Login
+          </button>
+          <button id="tab-register" class="flex-1 pb-3 tab-inactive" onclick="showTab('register')">
+            Register
+          </button>
+        </div>
+
+        <!-- ============ LOGIN FORM ============ -->
+        <div id="form-login">
+          <h2 class="text-2xl font-bold text-gray-900">Welcome back</h2>
+          <p class="text-sm text-gray-500 mt-1 mb-6">Enter your details to access your account</p>
+
+          <form class="space-y-5" onsubmit="event.preventDefault();">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Email address</label>
+              <input type="email" placeholder="you@example.com"
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-800 focus:border-transparent" />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+              <input type="password" placeholder="••••••••"
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-800 focus:border-transparent" />
+            </div>
+            <div class="flex items-center justify-between text-sm">
+              <label class="flex items-center gap-2 text-gray-600">
+                <input type="checkbox" class="rounded border-gray-300 text-emerald-800 focus:ring-emerald-800" />
+                Remember me
+              </label>
+              <a href="#" class="text-yellow-600 hover:text-yellow-700 font-medium">Forgot password?</a>
+            </div>
+            <button type="submit"
+              class="w-full bg-emerald-900 hover:bg-emerald-800 text-white font-semibold py-3 rounded-lg transition">
+              Login
+            </button>
+          </form>
+
+          <p class="text-center text-sm text-gray-500 mt-6">
+            Don't have an account?
+            <button onclick="showTab('register')" class="text-yellow-600 font-semibold hover:text-yellow-700">Register</button>
+          </p>
+        </div>
+
+        <!-- ============ REGISTER FORM ============ -->
+        <div id="form-register" class="hidden">
+          <h2 class="text-2xl font-bold text-gray-900">Create an account</h2>
+          <p class="text-sm text-gray-500 mt-1 mb-6">Tell us who you are to get started</p>
+
+          <!-- ====== ROLE SELECTOR (Tenant vs Landlord/Agent) ====== -->
+          <div class="grid grid-cols-2 gap-3 mb-6">
+            <div id="role-tenant" class="role-card active" onclick="selectRole('tenant')">
+              <div class="role-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M3 10.5L12 3l9 7.5M5 9.5V21h14V9.5" />
+                </svg>
+              </div>
+              <p class="font-semibold text-sm text-gray-900">I'm a Tenant</p>
+              <p class="text-xs text-gray-500 leading-tight">Looking for a home</p>
+            </div>
+
+            <div id="role-landlord" class="role-card" onclick="selectRole('landlord')">
+              <div class="role-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15 7a3 3 0 11-6 0 3 3 0 016 0zM4.5 19.5a7.5 7.5 0 0115 0v.75H4.5v-.75z" />
+                </svg>
+              </div>
+              <p class="font-semibold text-sm text-gray-900">I'm a Landlord</p>
+              <p class="text-xs text-gray-500 leading-tight">Listing properties</p>
+            </div>
+          </div>
+
+          <form class="space-y-5" onsubmit="event.preventDefault();">
+
+            <!-- Common fields -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Full name</label>
+              <input type="text" placeholder="John Doe"
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-800 focus:border-transparent" />
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Email address</label>
+              <input type="email" placeholder="you@example.com"
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-800 focus:border-transparent" />
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Phone number</label>
+              <input type="tel" placeholder="+234 800 000 0000"
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-800 focus:border-transparent" />
+            </div>
+
+            <!-- TENANT-ONLY FIELDS -->
+            <div id="tenant-fields" class="space-y-5">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Preferred location</label>
+                <input type="text" placeholder="e.g. Lekki, Abuja, Port Harcourt"
+                  class="w-full px-4 py-3 border border-gray-300 rounded-lg text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-800 focus:border-transparent" />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Budget range</label>
+                <select class="w-full px-4 py-3 border border-gray-300 rounded-lg text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-emerald-800 focus:border-transparent">
+                  <option>Select budget</option>
+                  <option>₦500k – ₦1M / year</option>
+                  <option>₦1M – ₦3M / year</option>
+                  <option>₦3M – ₦10M / year</option>
+                  <option>₦10M+ / year</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- LANDLORD / AGENT-ONLY FIELDS -->
+            <div id="landlord-fields" class="space-y-5 hidden">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Agency / Company name <span class="text-gray-400 font-normal">(optional)</span></label>
+                <input type="text" placeholder="e.g. Prime Homes Ltd"
+                  class="w-full px-4 py-3 border border-gray-300 rounded-lg text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-800 focus:border-transparent" />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Number of properties</label>
+                <select class="w-full px-4 py-3 border border-gray-300 rounded-lg text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-emerald-800 focus:border-transparent">
+                  <option>Select range</option>
+                  <option>1 property</option>
+                  <option>2 – 5 properties</option>
+                  <option>6 – 20 properties</option>
+                  <option>20+ properties</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Password -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+              <input type="password" placeholder="••••••••"
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-800 focus:border-transparent" />
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Confirm password</label>
+              <input type="password" placeholder="••••••••"
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-800 focus:border-transparent" />
+            </div>
+
+            <label class="flex items-start gap-2 text-sm text-gray-600">
+              <input type="checkbox" class="mt-1 rounded border-gray-300 text-emerald-800 focus:ring-emerald-800" />
+              <span>I agree to the <a href="#" class="text-yellow-600 font-medium">Terms</a> and <a href="#" class="text-yellow-600 font-medium">Privacy Policy</a></span>
+            </label>
+
+            <button type="submit"
+              class="w-full bg-emerald-900 hover:bg-emerald-800 text-white font-semibold py-3 rounded-lg transition">
+              Create account
+            </button>
+          </form>
+
+          <p class="text-center text-sm text-gray-500 mt-6">
+            Already have an account?
+            <button onclick="showTab('login')" class="text-yellow-600 font-semibold hover:text-yellow-700">Login</button>
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ JS: tabs + role switching ============ -->
+  <script>
+    function showTab(tab) {
+      const loginForm = document.getElementById('form-login');
+      const registerForm = document.getElementById('form-register');
+      const loginTab = document.getElementById('tab-login');
+      const registerTab = document.getElementById('tab-register');
+
+      if (tab === 'login') {
+        loginForm.classList.remove('hidden');
+        registerForm.classList.add('hidden');
+        loginTab.className = 'flex-1 pb-3 tab-active';
+        registerTab.className = 'flex-1 pb-3 tab-inactive';
+      } else {
+        registerForm.classList.remove('hidden');
+        loginForm.classList.add('hidden');
+        registerTab.className = 'flex-1 pb-3 tab-active';
+        loginTab.className = 'flex-1 pb-3 tab-inactive';
+      }
+    }
+
+    function selectRole(role) {
+      const tenantCard = document.getElementById('role-tenant');
+      const landlordCard = document.getElementById('role-landlord');
+      const tenantFields = document.getElementById('tenant-fields');
+      const landlordFields = document.getElementById('landlord-fields');
+
+      if (role === 'tenant') {
+        tenantCard.classList.add('active');
+        landlordCard.classList.remove('active');
+        tenantFields.classList.remove('hidden');
+        landlordFields.classList.add('hidden');
+      } else {
+        landlordCard.classList.add('active');
+        tenantCard.classList.remove('active');
+        landlordFields.classList.remove('hidden');
+        tenantFields.classList.add('hidden');
+      }
+    }
+  </script>
+
+</body>
+</html>
