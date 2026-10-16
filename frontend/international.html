@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>International Properties — HomelyNG</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <style>
+    .bg-brand-green { background-color: #064e3b; }
+    .text-brand-green { color: #064e3b; }
+    .hover\:bg-brand-green-dark:hover { background-color: #053a2c; }
+    #map { height: 100%; width: 100%; border-radius: 0.5rem; z-index: 0; }
+    .map-pin { background: #064e3b; color: white; border-radius: 9999px; padding: 5px 10px; font-size: 12px; font-weight: 600; white-space: nowrap; box-shadow: 0 4px 10px rgba(0,0,0,0.25); border: 2px solid white; cursor: pointer; }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-800 antialiased">
+
+  <header class="bg-white border-b border-gray-200 sticky top-0 z-40">
+    <nav class="max-w-7xl mx-auto flex items-center justify-between px-6 py-4">
+      <a href="landing.html" class="flex items-center gap-2">
+        <div class="w-9 h-9 rounded-md bg-yellow-400 flex items-center justify-center">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10.5L12 3l9 7.5M5 9.5V21h14V9.5" /></svg>
+        </div>
+        <span class="text-gray-900 font-bold text-xl">HomelyNG</span>
+      </a>
+      <ul class="hidden md:flex items-center gap-8 text-sm font-medium">
+        <li><a href="search.html"         class="text-gray-600 hover:text-gray-900">Buy</a></li>
+        <li><a href="rent.html"           class="text-gray-600 hover:text-gray-900">Rent</a></li>
+        <li><a href="lease.html"          class="text-gray-600 hover:text-gray-900">Lease</a></li>
+        <li><a href="international.html"  class="text-yellow-500 border-b-2 border-yellow-500 pb-1">International</a></li>
+        <li><a href="about.html"          class="text-gray-600 hover:text-gray-900">About</a></li>
+        <li><a href="contact.html"        class="text-gray-600 hover:text-gray-900">Contact</a></li>
+      </ul>
+      <div class="flex items-center gap-3">
+        <a href="login.html" class="border border-gray-300 text-gray-800 text-sm font-medium px-4 py-2 rounded-lg hover:bg-gray-50 transition">Login</a>
+        <a href="login.html" class="bg-brand-green hover:bg-brand-green-dark text-white text-sm font-semibold px-4 py-2 rounded-lg transition">Sign Up</a>
+      </div>
+    </nav>
+  </header>
+
+  <div class="max-w-7xl mx-auto px-6 pt-6">
+    <div class="flex items-center gap-2 mb-4 text-sm">
+      <span class="w-2.5 h-2.5 rounded-full bg-emerald-600"></span>
+      <span class="font-medium text-gray-800">Showing 42 international properties</span>
+    </div>
+  </div>
+
+  <div class="max-w-7xl mx-auto px-6 pb-12 grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <div class="lg:col-span-2">
+      <div id="property-grid" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5"></div>
+    </div>
+    <div class="lg:col-span-1">
+      <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden h-[720px] flex flex-col">
+        <div class="px-5 py-4 border-b border-gray-100"><h3 class="font-semibold text-gray-900">Map View</h3></div>
+        <div class="flex-1 p-3"><div id="map"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const allProperties = [
+      { id: 30, title: "3 Bedroom Flat in Kensington",   price: "£1,250,000",   location: "London, UK",       beds: 3, baths: 2, sqm: 150, tag: "International", coords: [51.4995, -0.1938], image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80" },
+      { id: 31, title: "Luxury Villa in Palm Jumeirah",  price: "AED 3,800,000", location: "Dubai, UAE",      beds: 4, baths: 4, sqm: 320, tag: "International", coords: [25.1123, 55.1387], image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80" },
+      { id: 32, title: "Modern Apartment in Manhattan",  price: "$1,850,000",   location: "New York, USA",   beds: 2, baths: 2, sqm: 110, tag: "International", coords: [40.7831, -73.9712], image: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=800&q=80" },
+      { id: 33, title: "Penthouse in Paris 8th",         price: "€2,400,000",   location: "Paris, France",   beds: 3, baths: 3, sqm: 180, tag: "International", coords: [48.8722, 2.3092], image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800&q=80" },
+      { id: 34, title: "Beachfront Villa in Cape Town",  price: "R 8,500,000",  location: "Cape Town, SA",   beds: 5, baths: 5, sqm: 400, tag: "International", coords: [-33.9249, 18.4241], image: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=800&q=80" },
+      { id: 35, title: "City View Condo in Toronto",     price: "C$1,150,000",  location: "Toronto, Canada", beds: 2, baths: 2, sqm: 130, tag: "International", coords: [43.6532, -79.3832], image: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=800&q=80" }
+    ];
+
+    const grid = document.getElementById('property-grid');
+    allProperties.forEach(p => {
+      grid.innerHTML += `
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-lg transition group">
+          <div class="relative h-48 overflow-hidden">
+            <img src="${p.image}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" alt="${p.title}" />
+            <span class="absolute top-3 left-3 bg-gray-900 text-white text-xs font-semibold px-2.5 py-1 rounded">${p.tag}</span>
+          </div>
+          <div class="p-4">
+            <p class="font-bold text-gray-900 text-base">${p.price}</p>
+            <h3 class="text-sm text-gray-800 mt-1 mb-2">${p.title}</h3>
+            <p class="text-xs text-gray-500 mb-3">📍 ${p.location}</p>
+            <div class="flex items-center gap-3 text-xs text-gray-600 border-t border-gray-100 pt-3 mb-3">
+              <span>${p.beds} Beds</span><span>•</span><span>${p.baths} Baths</span><span>•</span><span>${p.sqm} sqm</span>
+            </div>
+            <a href="property.html?id=${p.id}" class="block text-center w-full border border-gray-300 hover:bg-gray-50 text-gray-800 text-sm font-medium py-2 rounded-lg transition">View Details</a>
+          </div>
+        </div>`;
+    });
+
+    const map = L.map('map').setView([20, 10], 2);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap', maxZoom: 19 }).addTo(map);
+    allProperties.forEach(p => {
+      const icon = L.divIcon({ className: 'custom-pin', html: `<div class="map-pin">${p.location.split(',')[0]}</div>`, iconSize: [80, 30], iconAnchor: [40, 15] });
+      L.marker(p.coords, { icon }).addTo(map).bindPopup(`<strong>${p.title}</strong><br />${p.price}<br /><a href="property.html?id=${p.id}" style="color:#064e3b;">View →</a>`);
+    });
+  </script>
+</body>
+</html>

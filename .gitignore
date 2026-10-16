@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+env/
+
+# Env
+.env
+
+# Person 3 — media service
+services/media/uploads/
+services/media/.venv/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Test media (local dev only)
+services/media/test_video.mp4
+services/media/*_thumb.jpg
+services/media/*_thumb.png

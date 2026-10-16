@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HomelyNG — Find Your Perfect Home</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .bg-brand-green { background-color: #064e3b; }
+    .text-brand-green { color: #064e3b; }
+    .hover\:bg-brand-green-dark:hover { background-color: #053a2c; }
+  </style>
+</head>
+<body class="bg-white text-gray-800 antialiased">
+
+  <!-- ================= NAVBAR ================= -->
+  <header class="absolute top-0 left-0 right-0 z-30">
+    <nav class="max-w-7xl mx-auto flex items-center justify-between px-6 py-5">
+
+      <!-- Logo -->
+      <a href="landing.html" class="flex items-center gap-2">
+        <div class="w-9 h-9 rounded-md bg-yellow-400 flex items-center justify-center">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 10.5L12 3l9 7.5M5 9.5V21h14V9.5" />
+          </svg>
+        </div>
+        <span class="text-white font-bold text-xl">HomelyNG</span>
+      </a>
+
+      <!-- Desktop nav -->
+      <ul class="hidden md:flex items-center gap-8 text-sm text-white/90">
+        <li><a href="search.html"        class="hover:text-yellow-400">Buy</a></li>
+        <li><a href="rent.html"          class="hover:text-yellow-400">Rent</a></li>
+        <li><a href="lease.html"         class="hover:text-yellow-400">Lease</a></li>
+        <li><a href="international.html" class="hover:text-yellow-400">International</a></li>
+        <li><a href="about.html"         class="hover:text-yellow-400">About</a></li>
+        <li><a href="contact.html"       class="hover:text-yellow-400">Contact</a></li>
+      </ul>
+
+      <!-- Desktop actions -->
+      <div class="hidden md:flex items-center gap-3">
+        <a href="login.html" class="text-white text-sm font-medium hover:text-yellow-400">Login</a>
+        <a href="login.html" class="bg-yellow-400 hover:bg-yellow-300 text-gray-900 text-sm font-semibold px-5 py-2 rounded-lg transition">Sign Up</a>
+      </div>
+
+      <!-- Mobile hamburger -->
+      <button id="mobile-menu-btn" class="md:hidden text-white p-2 -mr-2" aria-label="Menu">
+        <svg id="icon-open" xmlns="http://www.w3.org/2000/svg" class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+        <svg id="icon-close" xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </nav>
+
+    <!-- Mobile menu panel -->
+    <div id="mobile-menu" class="hidden md:hidden absolute top-full left-0 right-0 mx-4 mt-2 bg-white shadow-2xl rounded-2xl overflow-hidden border border-gray-100">
+      <ul class="flex flex-col text-sm font-medium text-gray-800">
+        <li><a href="search.html"        class="block px-6 py-4 border-b border-gray-100 hover:bg-gray-50">Buy</a></li>
+        <li><a href="rent.html"          class="block px-6 py-4 border-b border-gray-100 hover:bg-gray-50">Rent</a></li>
+        <li><a href="lease.html"         class="block px-6 py-4 border-b border-gray-100 hover:bg-gray-50">Lease</a></li>
+        <li><a href="international.html" class="block px-6 py-4 border-b border-gray-100 hover:bg-gray-50">International</a></li>
+        <li><a href="about.html"         class="block px-6 py-4 border-b border-gray-100 hover:bg-gray-50">About</a></li>
+        <li><a href="contact.html"       class="block px-6 py-4 border-b border-gray-100 hover:bg-gray-50">Contact</a></li>
+      </ul>
+      <div class="p-4 bg-gray-50 flex flex-col gap-2">
+        <a href="login.html" class="text-center border border-gray-300 text-gray-800 text-sm font-semibold py-3 rounded-lg hover:bg-white transition">Login</a>
+        <a href="login.html" class="text-center bg-yellow-400 hover:bg-yellow-300 text-gray-900 text-sm font-semibold py-3 rounded-lg transition">Sign Up</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ================= HERO ================= -->
+  <section class="relative min-h-[600px] lg:min-h-[700px] flex items-center justify-center overflow-hidden">
+    <img
+      src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80"
+      alt="Luxury home"
+      class="absolute inset-0 w-full h-full object-cover"
+    />
+    <div class="absolute inset-0 bg-black/55"></div>
+
+    <div class="relative z-10 text-center px-6 max-w-4xl mx-auto pt-24">
+      <p class="text-yellow-400 font-semibold tracking-wide text-sm uppercase mb-4">
+        Nigeria's trusted property platform
+      </p>
+      <h1 class="text-white font-bold text-4xl sm:text-5xl lg:text-6xl leading-tight mb-6">
+        Find Your Perfect Home<br />in Nigeria &amp; Beyond
+      </h1>
+      <p class="text-gray-200 text-base sm:text-lg max-w-xl mx-auto mb-10">
+        Buy, rent, or lease verified properties from trusted agents.
+      </p>
+
+      <!-- Search bar -->
+      <form id="hero-search" class="bg-white rounded-2xl shadow-2xl p-2 flex flex-col sm:flex-row gap-2 max-w-3xl mx-auto">
+        <input
+          id="search-location"
+          name="location"
+          type="text"
+          placeholder="Where are you looking?"
+          class="flex-1 px-5 py-3 rounded-xl text-sm focus:outline-none"
+        />
+        <select
+          id="search-type"
+          name="type"
+          class="px-5 py-3 rounded-xl text-sm bg-gray-50 focus:outline-none"
+        >
+          <option value="">Any type</option>
+          <option value="apartment">Apartment</option>
+          <option value="duplex">Duplex</option>
+          <option value="land">Land</option>
+        </select>
+        <button
+          type="submit"
+          class="bg-brand-green hover:bg-brand-green-dark text-white font-semibold px-8 py-3 rounded-xl text-sm transition"
+        >
+          Search
+        </button>
+      </form>
+    </div>
+  </section>
+
+  <!-- ================= THREE CATEGORIES ================= -->
+  <section class="max-w-6xl mx-auto px-6 py-20">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+
+      <!-- Buy -->
+      <a href="search.html" class="text-center group block">
+        <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-emerald-700 to-emerald-900 flex items-center justify-center mx-auto mb-5 shadow-lg shadow-emerald-900/20 group-hover:scale-110 group-hover:shadow-xl transition-all duration-300">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75" />
+          </svg>
+        </div>
+        <h3 class="font-bold text-lg text-gray-900 mb-2">Buy</h3>
+        <p class="text-sm text-gray-500 leading-relaxed">Find your forever home in prime locations.</p>
+      </a>
+
+      <!-- Rent -->
+      <a href="rent.html" class="text-center group block">
+        <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-yellow-400 to-yellow-500 flex items-center justify-center mx-auto mb-5 shadow-lg shadow-yellow-500/20 group-hover:scale-110 group-hover:shadow-xl transition-all duration-300">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10 text-gray-900" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 5.25a3 3 0 013 3m3 0a6 6 0 01-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1121.75 8.25z" />
+          </svg>
+        </div>
+        <h3 class="font-bold text-lg text-gray-900 mb-2">Rent</h3>
+        <p class="text-sm text-gray-500 leading-relaxed">Comfortable homes for short or long stays.</p>
+      </a>
+
+      <!-- Lease -->
+      <a href="lease.html" class="text-center group block">
+        <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center mx-auto mb-5 shadow-lg shadow-emerald-600/20 group-hover:scale-110 group-hover:shadow-xl transition-all duration-300">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25M9 16.5v.75m3-3v3M15 12v5.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+          </svg>
+        </div>
+        <h3 class="font-bold text-lg text-gray-900 mb-2">Lease</h3>
+        <p class="text-sm text-gray-500 leading-relaxed">Premium commercial spaces for your business.</p>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- ================= FEATURED PROPERTIES ================= -->
+  <section class="bg-gray-50 py-20">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="flex items-end justify-between mb-10">
+        <div>
+          <h2 class="text-2xl sm:text-3xl font-bold text-gray-900">Featured Properties</h2>
+          <p class="text-sm text-gray-500 mt-2">Hand-picked homes for you</p>
+        </div>
+        <a href="search.html" class="hidden sm:inline-block text-sm font-semibold text-brand-green hover:underline">
+          View all →
+        </a>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <!-- Card 1 -->
+        <a href="property.html?id=1" class="block bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition group">
+          <div class="relative h-48 overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=800&q=80"
+                 class="w-full h-full object-cover group-hover:scale-105 transition duration-500" alt="Property" />
+            <span class="absolute top-3 left-3 bg-brand-green text-white text-xs font-semibold px-2.5 py-1 rounded">For Sale</span>
+          </div>
+          <div class="p-4">
+            <p class="font-bold text-gray-900">₦145,000,000</p>
+            <p class="text-xs text-gray-500 mt-1 mb-3">📍 Lagos, Nigeria</p>
+            <div class="flex gap-3 text-xs text-gray-500 border-t pt-3">
+              <span>4 Beds</span><span>•</span><span>4 Baths</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- Card 2 -->
+        <a href="property.html?id=2" class="block bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition group">
+          <div class="relative h-48 overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1568605114967-8130f3a36994?auto=format&fit=crop&w=800&q=80"
+                 class="w-full h-full object-cover group-hover:scale-105 transition duration-500" alt="Property" />
+            <span class="absolute top-3 left-3 bg-yellow-400 text-gray-900 text-xs font-semibold px-2.5 py-1 rounded">For Rent</span>
+          </div>
+          <div class="p-4">
+            <p class="font-bold text-gray-900">₦4,500,000 <span class="text-xs font-normal text-gray-500">/yr</span></p>
+            <p class="text-xs text-gray-500 mt-1 mb-3">📍 Abuja, Nigeria</p>
+            <div class="flex gap-3 text-xs text-gray-500 border-t pt-3">
+              <span>3 Beds</span><span>•</span><span>3 Baths</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- Card 3 -->
+        <a href="property.html?id=3" class="block bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition group">
+          <div class="relative h-48 overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80"
+                 class="w-full h-full object-cover group-hover:scale-105 transition duration-500" alt="Property" />
+            <span class="absolute top-3 left-3 bg-gray-900 text-white text-xs font-semibold px-2.5 py-1 rounded">International</span>
+          </div>
+          <div class="p-4">
+            <p class="font-bold text-gray-900">£1,250,000</p>
+            <p class="text-xs text-gray-500 mt-1 mb-3">📍 London, UK</p>
+            <div class="flex gap-3 text-xs text-gray-500 border-t pt-3">
+              <span>3 Beds</span><span>•</span><span>2 Baths</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- Card 4 -->
+        <a href="property.html?id=4" class="block bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition group">
+          <div class="relative h-48 overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80"
+                 class="w-full h-full object-cover group-hover:scale-105 transition duration-500" alt="Property" />
+            <span class="absolute top-3 left-3 bg-gray-900 text-white text-xs font-semibold px-2.5 py-1 rounded">International</span>
+          </div>
+          <div class="p-4">
+            <p class="font-bold text-gray-900">AED 3,800,000</p>
+            <p class="text-xs text-gray-500 mt-1 mb-3">📍 Dubai, UAE</p>
+            <div class="flex gap-3 text-xs text-gray-500 border-t pt-3">
+              <span>4 Beds</span><span>•</span><span>4 Baths</span>
+            </div>
+          </div>
+        </a>
+      </div>
+
+      <div class="text-center mt-10 sm:hidden">
+        <a href="search.html" class="text-sm font-semibold text-brand-green hover:underline">View all properties →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= HOW IT WORKS ================= -->
+  <section class="max-w-6xl mx-auto px-6 py-20">
+    <div class="text-center mb-14">
+      <h2 class="text-2xl sm:text-3xl font-bold text-gray-900">How It Works</h2>
+      <p class="text-sm text-gray-500 mt-2">Three simple steps to find your home</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+      <div class="text-center">
+        <div class="w-12 h-12 rounded-full bg-brand-green text-white flex items-center justify-center mx-auto mb-4 font-bold">1</div>
+        <h3 class="font-semibold text-gray-900 mb-2">Search</h3>
+        <p class="text-sm text-gray-500 leading-relaxed">Find properties that match your needs.</p>
+      </div>
+      <div class="text-center">
+        <div class="w-12 h-12 rounded-full bg-brand-green text-white flex items-center justify-center mx-auto mb-4 font-bold">2</div>
+        <h3 class="font-semibold text-gray-900 mb-2">Choose</h3>
+        <p class="text-sm text-gray-500 leading-relaxed">Shortlist and book viewings with ease.</p>
+      </div>
+      <div class="text-center">
+        <div class="w-12 h-12 rounded-full bg-brand-green text-white flex items-center justify-center mx-auto mb-4 font-bold">3</div>
+        <h3 class="font-semibold text-gray-900 mb-2">Move In</h3>
+        <p class="text-sm text-gray-500 leading-relaxed">Secure your home and start your journey.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= TESTIMONIAL ================= -->
+  <section class="bg-gray-50 py-20">
+    <div class="max-w-3xl mx-auto px-6 text-center">
+      <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">What Our Clients Say</h2>
+      <p class="text-sm text-gray-500 mb-10">Real stories from happy homeowners</p>
+
+      <div class="bg-white rounded-2xl shadow-sm p-8 sm:p-10">
+        <p class="text-gray-700 text-base sm:text-lg leading-relaxed mb-6 italic">
+          "HomelyNG made finding my dream home in Lagos so easy. The team was professional and supported every step of the way."
+        </p>
+        <div class="flex items-center justify-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-brand-green text-white flex items-center justify-center font-semibold text-sm">CO</div>
+          <div class="text-left">
+            <p class="text-sm font-semibold text-gray-900">Chinedu Okafor</p>
+            <p class="text-xs text-gray-500">Lagos, Nigeria</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="bg-brand-green text-white">
+    <div class="max-w-6xl mx-auto px-6 py-14">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+        <div>
+          <div class="flex items-center gap-2 mb-4">
+            <div class="w-9 h-9 rounded-md bg-yellow-400 flex items-center justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 10.5L12 3l9 7.5M5 9.5V21h14V9.5" />
+              </svg>
+            </div>
+            <span class="font-bold text-lg">HomelyNG</span>
+          </div>
+          <p class="text-sm text-white/70 leading-relaxed">
+            Your trusted partner in finding the perfect home in Nigeria and beyond.
+          </p>
+        </div>
+
+        <div>
+          <h4 class="font-semibold mb-4 text-sm uppercase tracking-wide text-yellow-400">Quick Links</h4>
+          <ul class="space-y-2 text-sm text-white/80">
+            <li><a href="search.html" class="hover:text-yellow-400">Buy</a></li>
+            <li><a href="rent.html" class="hover:text-yellow-400">Rent</a></li>
+            <li><a href="lease.html" class="hover:text-yellow-400">Lease</a></li>
+            <li><a href="international.html" class="hover:text-yellow-400">International</a></li>
+            <li><a href="about.html" class="hover:text-yellow-400">About</a></li>
+            <li><a href="contact.html" class="hover:text-yellow-400">Contact</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="font-semibold mb-4 text-sm uppercase tracking-wide text-yellow-400">Newsletter</h4>
+          <p class="text-sm text-white/70 mb-4">Get the latest property updates.</p>
+          <form class="flex gap-2" onsubmit="event.preventDefault();">
+            <input type="email" placeholder="Enter your email"
+              class="flex-1 px-4 py-2.5 rounded-lg text-sm text-gray-900 focus:outline-none" />
+            <button class="bg-yellow-400 hover:bg-yellow-300 text-gray-900 font-semibold px-4 py-2.5 rounded-lg text-sm transition">
+              →
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <div class="border-t border-white/10 mt-12 pt-6 text-center text-xs text-white/60">
+        © 2025 HomelyNG. All rights reserved.
+      </div>
+    </div>
+  </footer>
+
+  <!-- ================= SCRIPTS ================= -->
+  <script>
+    /* Search bar redirect */
+    document.getElementById('hero-search').addEventListener('submit', function (e) {
+      e.preventDefault();
+      const location = document.getElementById('search-location').value.trim();
+      const type = document.getElementById('search-type').value;
+      const params = new URLSearchParams();
+      if (location) params.set('location', location);
+      if (type) params.set('type', type);
+      window.location.href = 'search.html' + (params.toString() ? '?' + params.toString() : '');
+    });
+
+    /* Mobile menu toggle */
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const iconOpen = document.getElementById('icon-open');
+    const iconClose = document.getElementById('icon-close');
+
+    function closeMenu() {
+      mobileMenu.classList.add('hidden');
+      iconOpen.classList.remove('hidden');
+      iconClose.classList.add('hidden');
+    }
+
+    mobileMenuBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isOpen = !mobileMenu.classList.contains('hidden');
+      if (isOpen) {
+        closeMenu();
+      } else {
+        mobileMenu.classList.remove('hidden');
+        iconOpen.classList.add('hidden');
+        iconClose.classList.remove('hidden');
+      }
+    });
+
+    mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
+
+    document.addEventListener('click', (e) => {
+      if (!mobileMenu.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+        closeMenu();
+      }
+    });
+  </script>
+
+</body>
+</html>
